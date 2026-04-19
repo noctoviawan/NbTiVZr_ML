@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import joblib
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -8,8 +9,22 @@ from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import ConstantKernel, RBF, WhiteKernel
 
-from config import TABLES, MODELS
+from config import TABLES, MODELS, FIGURES
 from preprocess import load_and_preprocess
+
+
+def save_actual_vs_pred(y_true, y_pred, out_path, title):
+    plt.figure(figsize=(6, 6))
+    plt.scatter(y_true, y_pred)
+    min_val = min(min(y_true), min(y_pred))
+    max_val = max(max(y_true), max(y_pred))
+    plt.plot([min_val, max_val], [min_val, max_val], linestyle="--")
+    plt.xlabel("Actual H")
+    plt.ylabel("Predicted H")
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close()
 
 
 def train_gpr_model(feature_cols=None, target_col="H", test_size=0.2, random_state=42):
@@ -74,11 +89,28 @@ def train_gpr_model(feature_cols=None, target_col="H", test_size=0.2, random_sta
     results.to_csv(TABLES / "gpr_results.csv", index=False)
     joblib.dump(pipeline, MODELS / "gpr_model.joblib")
 
-    pred_df = pd.DataFrame({
-        "y_test": y_test.values,
-        "y_pred": y_test_pred
+    train_pred_df = pd.DataFrame({
+        "Actual_H": y_train.values,
+        "Predicted_H": y_train_pred
     })
-    pred_df.to_csv(TABLES / "gpr_test_predictions.csv", index=False)
+    train_pred_df.to_csv(TABLES / "gpr_train_predictions.csv", index=False)
+
+    test_pred_df = pd.DataFrame({
+        "Actual_H": y_test.values,
+        "Predicted_H": y_test_pred
+    })
+    test_pred_df.to_csv(TABLES / "gpr_test_predictions.csv", index=False)
+
+    save_actual_vs_pred(
+        y_train.values, y_train_pred,
+        FIGURES / "gpr_actual_vs_pred_train.png",
+        "GPR Train: Actual vs Predicted"
+    )
+    save_actual_vs_pred(
+        y_test.values, y_test_pred,
+        FIGURES / "gpr_actual_vs_pred_test.png",
+        "GPR Test: Actual vs Predicted"
+    )
 
     print(results)
     print(f"Saved model to {MODELS / 'gpr_model.joblib'}")
