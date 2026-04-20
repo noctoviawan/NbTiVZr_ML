@@ -26,8 +26,10 @@ def save_actual_vs_pred(y_true, y_pred, out_path, title):
     plt.close()
 
 
-def train_xgboost_model(feature_cols=None, target_col="H", test_size=0.2, random_state=42):
-    df = load_and_preprocess()
+def train_xgboost_model(df=None, feature_cols=None, target_col="H", ...):
+
+    if df is None:
+        df = load_and_preprocess()
 
     if feature_cols is None:
         feature_cols = [
