@@ -14,6 +14,7 @@ def save_figure(path, dpi=300):
 
 
 def run_shap_analysis(feature_cols=None, target_col="H"):
+    if df is None:
     df = load_and_preprocess()
 
     if feature_cols is None:
