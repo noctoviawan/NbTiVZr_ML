@@ -13,7 +13,7 @@ def save_figure(path, dpi=300):
     plt.close()
 
 
-def run_shap_analysis(feature_cols=None, target_col="H"):
+def run_shap_analysis(df=None, feature_cols=None, target_col="H"):
     if df is None:
     df = load_and_preprocess()
 
