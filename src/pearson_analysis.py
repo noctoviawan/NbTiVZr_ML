@@ -7,7 +7,7 @@ import os
 # =========================
 # Load data
 # =========================
-df = pd.read_csv("data/raw/NTVZ_LIB_ALL.csv")  # <-- update path if needed
+df = pd.read_csv("/content/NbTiVZr_ML/data/raw/NTVZ_LIB_ALL.csv")  # <-- update path if needed
 
 # =========================
 # Select columns
