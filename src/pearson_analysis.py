@@ -129,7 +129,7 @@ sns.heatmap(
 
 plt.title("Pearson Correlation Analysis: Composition, Ratios, Descriptors, and Hardness", fontsize=14)
 plt.tight_layout()
-plt.savefig(os.path.join(out_dir, "pearson_heatmap_all_features.png"), dpi=300, bbox_inches="tight")
+plt.savefig("outputs/figures/pearson_heatmap_all_features.png", dpi=300)
 plt.show()
 
 # =========================
@@ -146,4 +146,5 @@ plt.ylabel("Feature")
 plt.title("Pearson Correlation of Features with Hardness")
 plt.tight_layout()
 plt.savefig(os.path.join(out_dir, "pearson_vs_hardness_barplot.png"), dpi=300, bbox_inches="tight")
+plt.savefig("outputs/figures/pearson_vs_hardness_barplot.png", dpi=300)
 plt.show()
